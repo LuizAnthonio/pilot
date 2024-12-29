@@ -1,0 +1,367 @@
+
+
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./index.css";
+import { Bar } from "react-chartjs-2";
+import { useAuth } from '../../contexts/AuthContext';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Registrar os componentes para o gráfico
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+
+export function Dashboard() {
+  const navigate = useNavigate();
+  const { auth } = useAuth();
+
+  // Estado para a empresa selecionada
+  const [empresaSelecionada, setEmpresaSelecionada] = useState("Empresa A");
+
+  // Lista de empresas (mock para exemplo)
+  const empresas = ["Empresa A", "Empresa B", "Empresa C"];
+
+  // Mock de dados para empresas
+  const dados = [
+    { empresa: "Empresa A", titulo: "Produto A", data: "2024-10-01", valor: "R$ 100,00", tipo: "Despesa" },
+    { empresa: "Empresa B", titulo: "Produto B", data: "2024-09-15", valor: "R$ 200,00", tipo: "Receita" },
+    { empresa: "Empresa A", titulo: "Produto C", data: "2024-08-25", valor: "R$ 150,00", tipo: "Franquia" },
+    { empresa: "Empresa C", titulo: "Produto D", data: "2024-07-12", valor: "R$ 250,00", tipo: "Despesa" },
+    { empresa: "Empresa B", titulo: "Produto E", data: "2024-06-10", valor: "R$ 300,00", tipo: "Receita" },
+    { empresa: "Empresa A", titulo: "Produto F", data: "2024-05-05", valor: "R$ 50,00", tipo: "Despesa" },
+  ];
+
+  useEffect(() => {
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [auth, navigate]);
+
+  if (!auth) return null;
+
+  const formatarMoeda = (valor) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+  };
+
+  // Filtrar dados com base na empresa selecionada
+  const dadosFiltrados = dados.filter(d => d.empresa === empresaSelecionada);
+
+  const tipos = [...new Set(dadosFiltrados.map(e => e.tipo))];
+  const cores = ["rgba(0, 168, 0, 0.8)", 'rgba(233, 98, 0, 0.8)', 'rgba(72, 164, 0, 0.8)'];
+
+  const databases = tipos.map((tipo, i) => ({
+    label: tipo,
+    data: dadosFiltrados.filter(e => e.tipo === tipo).map(val => parseFloat(val.valor.replace("R$ ", "").replace(",", "."))),
+    borderColor: cores[i],
+    backgroundColor: cores[i]
+  }));
+
+  const soma = (arr) => arr.reduce((acc, val) => acc + val, 0);
+
+  const dadosPainel = tipos.map((tipo, i) => ({
+    tipo,
+    total: soma(databases[i].data)
+  }));
+
+  const saldo = dadosPainel.reduce((acc, item) => item.tipo === "Receita" ? acc + item.total : acc - item.total, 0);
+
+  const data = {
+    labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+    datasets: databases,
+  };
+
+  return (
+    <section>
+      <h1 className="title">Painel</h1>
+
+      {/* Dropdown para selecionar empresa */}
+      <select
+        value={empresaSelecionada}
+        onChange={(e) => setEmpresaSelecionada(e.target.value)}
+        className="dropdown"
+      >
+        {empresas.map((empresa) => (
+          <option key={empresa} value={empresa}>
+            {empresa}
+          </option>
+        ))}
+      </select>
+
+      <Bar data={data} className="grafico" />
+
+      <div className="container-box">
+        <div className="box-content">
+          {dadosPainel.map((item, i) => (
+            <div className="box-1" key={i}>
+              <p>{item.tipo}</p>
+              <h2>{formatarMoeda(item.total)}</h2>
+            </div>
+          ))}
+        </div>
+        <div className="box-content">
+          <div className="box-2">
+            <p>Saldo Real</p>
+            <h2>{formatarMoeda(saldo)}</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./index.css"
+import { Bar, Line } from "react-chartjs-2";
+import { useAuth } from '../../contexts/AuthContext';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, BarElement } from 'chart.js';
+
+// Registrar os componentes para o gráfico
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
+
+
+export function Dashboard() {
+  /*
+  const navigate = useNavigate();
+  const { auth } = useAuth();
+
+  //let auth = localStorage.getItem('token');
+  //let auth = true
+
+  if (!auth) {
+   navigate('/login');
+   console.log("não tá logado")
+  }
+
+/*
+
+    if (!auth) {
+     navigate('/login');
+     console.log("não tá logado")
+    }
+     */
+
+    //const [dados,setDados] = useState([])
+    /*
+
+  const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+
+
+  const dados = [
+    { titulo: 'Produto A', data: '2024-10-01', valor: 'R$ 100,00', tipo: "Despesa", isParcelado: false, qtdParcela: 1,isRecorrente:0 },
+    { titulo: 'Produto B', data: '2024-09-15', valor: 'R$ 200,00', tipo: "Despesa", isParcelado: false, qtdParcela: 1,isRecorrente:0 },
+    { titulo: 'Produto C', data: '2024-08-25', valor: 'R$ 150,00', tipo: "Franquia", isParcelado: false, qtdParcela: 1,isRecorrente:0 },
+    { titulo: 'Produto D', data: '2024-07-12', valor: 'R$ 250,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto E', data: '2024-06-10', valor: 'R$ 300,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto F', data: '2024-05-05', valor: 'R$ 50,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto G', data: '2024-04-20', valor: 'R$ 400,00', tipo:"Franquia", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto H', data: '2023-10-01', valor: 'R$ 500,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto I', data: '2023-09-15', valor: 'R$ 600,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto J', data: '2023-08-25', valor: 'R$ 700,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto K', data: '2023-07-12', valor: 'R$ 800,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto L', data: '2023-06-10', valor: 'R$ 900,00', tipo:"Franquia", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto M', data: '2023-05-05', valor: 'R$ 1000,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto N', data: '2023-04-20', valor: 'R$ 1100,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto O', data: '2023-03-15', valor: 'R$ 1200,00', tipo:"Franquia", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto P', data: '2023-02-10', valor: 'R$ 1300,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto Q', data: '2023-01-05', valor: 'R$ 1400,00', tipo:"Franquia", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto R', data: '2024-01-01', valor: 'R$ 1500,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto S', data: '2024-02-01', valor: 'R$ 1600,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto T', data: '2024-03-01', valor: 'R$ 1700,00', tipo:"Despesa", isParcelado:false,qtdParcela:1,isRecorrente:0 },
+    { titulo: 'Produto U', data: '2024-06-01', valor: 'R$ 3700,00', tipo:"Receita", isParcelado:false,qtdParcela:1,isRecorrente:0 }
+    // Adicione mais produtos ou transações aqui
+  ];
+
+  const navigate = useNavigate();
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    if (!auth) {
+      navigate('/login');
+    }
+  }, [auth, navigate]);
+
+  if (!auth) return null; // Evita renderizar o restante do componente se não estiver autenticado
+
+  const meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+
+  const formatarMoeda = (valor) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+  };
+
+/*
+  const formatarMoeda = (valor) => {
+   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+ };
+
+
+  let ano = new Date().getFullYear()
+
+  const valores = dados.map(item => parseFloat(item.valor.split("R$ ")[1].replace(",", ".")));
+  const label = meses.map(mes => `${mes}/${ano}`)
+  
+
+  function soma(arr){
+   let soma = 0;
+   for(let i in arr){
+      soma+=parseFloat(arr[i])
+   }
+
+   return soma;
+  }
+
+  let databases = []
+
+  const tipos = [...new Set(dados.map(e => e.tipo))]
+  const cores = ["rgba(0, 168, 0, 0.8)",'rgba(233, 98, 0, 0.8)','rgba(72, 164, 0, 0.8)']
+
+  for(let i in tipos){
+
+         let despesa = {
+               label:tipos[i],
+               data:dados.filter(e => e.tipo === tipos[i]).map(val => val.valor.split("R$ ")[1].replace(",", ".")),
+               borderColor: cores[i],
+               backgroundColor: cores[i]
+         
+         }
+
+         databases.push(despesa)
+     
+  }
+
+  let dadosPainel = []
+
+
+  for(let a in tipos){
+     let forma = {}
+     forma.tipo = tipos[a]
+     forma.total = soma(databases[a].data)
+     dadosPainel.push(forma)
+
+  }
+
+  console.log(dadosPainel)
+
+  let saldo = (dadosPainel[1].total + dadosPainel[2].total) - dadosPainel[0].total
+  let lucro =  dadosPainel[2].total - dadosPainel[0].total
+
+
+
+
+  const data = {
+   labels: label,
+   datasets: databases,
+ };
+
+
+/*
+  const data = {
+   labels: label,
+   datasets: [
+     {
+       label: 'Valor dos Produtos',
+       data: [1,2,3,4],
+       borderColor: 'rgb(0, 168, 0)',
+       backgroundColor: 'rgba(0, 168, 0, 0.8)',
+     },
+     
+   ],
+ };
+*/
+
+  
+
+  useEffect(() => {
+    const auth = localStorage.getItem('token');
+
+    if (!auth) {
+      navigate('/login');
+     console.log("não tá logado")
+    }
+
+    console.log("Auth",auth)
+
+  }, [navigate]);
+
+  return (
+    <section>
+
+        <h1 className="title">Painel</h1>
+
+      
+        <Bar data={data} className="grafico" />
+
+      
+  
+      <div className="container-box">
+  
+  <div className="box-content">
+       <div className="box-1">
+  
+          <p>FRANQUIA REAL</p>
+          
+          <h2>{formatarMoeda(dadosPainel[1].total)}</h2>
+  
+       </div>
+       <div className="box-1">
+  
+          <p>Receita Real</p>
+          
+          <h2>{formatarMoeda(dadosPainel[2].total)}</h2>
+  
+       </div>
+       <div className="box-1">
+  
+          <p>DESPE. MENSAL REAL</p>
+          
+          <h2>{formatarMoeda(dadosPainel[0].total)}</h2>
+  
+       </div>
+      
+  
+  </div>
+  <div className="box-content">
+       <div className="box-2">
+  
+          <p>Saldo Real</p>
+         
+        
+          <h2>{formatarMoeda(saldo)}</h2>
+  
+       </div>
+       <div className="box-2">
+  
+          <p>Lucro Real</p>
+          
+       
+          <h2>{formatarMoeda(lucro)}</h2>
+  
+       </div>
+  
+  </div>
+  
+      </div>
+      
+  
+  
+  
+    </section>
+
+  );
+}
+
+*/

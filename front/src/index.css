@@ -1,0 +1,44 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body,html{
+    background-color: #002C2C;
+}
+
+.lista-empresas{
+    width: 100%;
+    background-color: #004b0e;
+    height: 300px;
+    z-index: 3;
+    text-align: center;
+    border-radius: 0px 0px 10px 10px;
+    
+ 
+    
+}
+
+.lista-select{
+    width: 300px;
+    position: fixed;
+    top: 137px;
+    z-index: 0;
+    left: 1px;
+
+
+}
+
+.lista-empresas p:hover{
+    width: 100%;
+    background-color: #ffffff56;
+
+}
+
+.flex1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}

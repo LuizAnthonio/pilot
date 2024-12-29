@@ -1,0 +1,190 @@
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+.input{
+    width: 100%;
+    max-width: 400px;
+    height: 35px;
+    border-radius: 3px;
+    outline: none;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #000;
+}
+
+.input-2{
+    width: 100%;
+    max-width: 400px;
+    height: 35px;
+    border-radius: 1px;
+    outline: none;
+    padding: 10px 1px;
+    margin: 10px;
+    border: 1px solid transparent;
+    border-bottom:1px solid #fbf9f9;
+    background: none;
+    color: #fbf9f9;
+}
+.input-2::placeholder{
+    color: #fbf9f9;
+   
+}
+
+
+.button{
+    width: 100%;
+    max-width: 300px;
+    height: 35px;
+    border-radius: 3px;
+    outline: none;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid transparent;
+    background-color: rgb(237, 118, 14);
+    font-weight: 500;
+    color: #fbf9f9;
+    cursor: pointer;
+    transition: 0.5s;
+
+}
+
+
+.button:hover{
+    background-color: #fbf9f9;
+    color: #C85A06;
+    border: 3 solid #C85A06;
+    transition: 0.5s;
+
+}
+
+.imgs svg{
+    position: relative;
+    top: 28.5%;
+}
+
+
+.input-class{
+    
+    color: #ffff;
+}
+
+.input-class p{
+   
+    width: 400px;
+    margin: 0 auto;
+    text-align: left;
+    height: 15px;
+   
+
+}
+
+.radioLabel{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffff;
+    cursor: pointer;
+    
+}
+
+
+
+.radioLabel input[type="radio"]{
+    margin: 3px;
+    padding: 5px;
+}
+
+
+.container-inputs{
+    width: 400px;
+    height: 55px;
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: center;
+    flex-direction: row;
+}
+.container-inputs-2{
+    width: 250px;
+    height: 55px;
+    display: flex;
+    margin: 0 auto;
+    
+    justify-content: space-around;
+    text-align: center;
+    color: #ffff;
+    
+}
+
+.container-inputs{
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #ffff;
+    margin: 0 auto;
+}
+
+.btn-2{
+    width: 100%;
+    max-width: 400px;
+    height: 40px;
+    border-radius: 10px;
+    color: #ffff;
+    background-color: #C85A06;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: 1s;
+    font-weight: 600;
+}
+
+.btn-2:hover{
+    transition: 1s;
+    background-color: #ffff;
+    color: #C85A06;
+    border: 2px solid #C85A06;
+}
+
+.formulario{
+    width: 100%;
+    max-width: 1200px;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(191, 191, 191, 0.425);
+    
+   
+    border-radius: 10px;
+    margin: 0 auto;
+    position: absolute; /* Ou fixed, dependendo do comportamento desejado */
+  top: 50%; /* Posiciona a div no meio do contêiner */
+  left: 50%; /* Posiciona a div no meio do contêiner */
+  transform: translate(-50%, -50%);
+}
+
+.imgs{
+    width: 50%;
+    height: 100%;
+    background-color: rgb(0, 137, 11);
+    border-radius: 10px;
+}
+
+.oLogin{
+    width: 50%;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.BtnSair{
+    cursor: pointer;
+}
